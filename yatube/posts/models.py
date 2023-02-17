@@ -17,6 +17,10 @@ class Group(models.Model):
     description = models.TextField(verbose_name="Описание группы")
 
     class Meta:
+        indexes = [
+            models.Index(fields=["title", "slug", "description"]),
+            models.Index(fields=["slug"], name="slug_idx"),
+        ]
         verbose_name = "Группа"
         verbose_name_plural = "Группы"
 
@@ -102,5 +106,9 @@ class Follow(models.Model):
     )
 
     class Meta:
+        constraints = [
+            models.UniqueConstraint(fields=["user", "author"],
+                                    name="unique_follow")
+        ]
         verbose_name = "Подписчик"
         verbose_name_plural = "Подписчики"
